@@ -45,12 +45,14 @@
 
 > ℹ️ **Naming transition:** The product and repository are `gentle-shell`; the npm package remains `gentle-pi`, and its launcher is `gentle-shell`.
 
-**Choose your setup**
+**Choose your setup** — follow one route, then [start your first session](#your-first-session).
 
-- **New to Pi?** [Download the integrated installer](#easiest-download-and-double-click-no-terminal-needed) — simplest setup, no terminal needed.
-- **Already use Pi?** [Add Gentle Shell to your existing Pi](#path-b-inside-an-existing-pi) — keep working in your agent.
-- **Prefer npm?** [Use the standalone `gentle-shell` launcher](#path-a-standalone-gentle-shell-recommended-no-pi-changes) — leave your Pi installation untouched.
-- **Working from a clone?** [Start the browser installer from a checkout](#path-c-browser-installer-from-a-checkout).
+| Your situation | Installation route |
+| :--- | :--- |
+| New to Pi | [Integrated installer — no terminal needed](#easiest-download-and-double-click-no-terminal-needed) |
+| Already use Pi | [Add the package to your existing Pi](#path-b-inside-an-existing-pi) |
+| Prefer npm and a separate environment | [Standalone `gentle-shell` launcher](#path-a-standalone-gentle-shell-recommended-no-pi-changes) |
+| Working from a clone | [Browser installer from a checkout](#path-c-browser-installer-from-a-checkout) |
 
 <a id="easiest-download-and-double-click-no-terminal-needed"></a>
 
@@ -71,148 +73,116 @@ The installer is a preview: it is tested on Linux and in CI, while clean-machine
 
 </details>
 
-- Download the installer for your computer, double-click it, and follow the steps in your browser. It installs everything Gentle Shell needs (Node.js, pnpm, Pi and Gentle Shell), or updates what you already have, and installs nothing until you confirm the plan it shows you. (To show that plan it may first download Node.js and pnpm into a temporary folder, which it removes afterwards.)
+1. **Download and extract** the installer for your computer:
 
-  - **macOS** · [gentle-shell-installer-macos.zip](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-macos.zip)
-    - Open the zip, then double-click **Install Gentle Shell.command** inside the *Gentle Shell Installer* folder.
+   | System | Download | After extracting |
+   | :--- | :--- | :--- |
+   | macOS | [macOS ZIP](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-macos.zip) | Open the zip, then double-click **Install Gentle Shell.command** in the *Gentle Shell Installer* folder. |
+   | Windows | [Windows ZIP](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-windows.zip) | Right-click the zip → **Extract All**, open the extracted *Gentle Shell Installer* folder, then double-click **Install Gentle Shell.cmd**. It does not run inside the zip. |
+   | Linux | [Linux archive](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-linux.tar.gz) | Extract it, then double-click **install-gentle-shell.sh**. If scripts do not run from your file manager, run `sh install-gentle-shell.sh` in that folder. |
 
-  - **Windows** · [gentle-shell-installer-windows.zip](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-windows.zip)
-    - Right-click the zip → **Extract All**. Open the extracted folder, then the *Gentle Shell Installer* folder inside it, and double-click **Install Gentle Shell.cmd**. It does not run from inside the zip.
-
-  - **Linux** · [gentle-shell-installer-linux.tar.gz](https://github.com/Gentleman-Programming/gentle-shell/releases/latest/download/gentle-shell-installer-linux.tar.gz)
-    - Extract it, then double-click **install-gentle-shell.sh**. If your file manager does not run scripts, run `sh install-gentle-shell.sh` in that folder.
-
-
-  A small window opens, then the installer appears in your browser. Use the tab it opens, and keep the small window open until the installer says it is done.
-
-  A new installation gets Gentle Shell as one self-contained product. Its own Node.js, npm, pnpm and Pi live in `~/.gentle-shell`, and your own tools are not used or changed ([bundled installation](docs/install-wizard.md#bundled-installation)).
+2. **Review the plan in your browser and confirm.** A small window opens first; keep it open and use the browser tab it opens until installation finishes. The installer installs what is missing (Node.js, pnpm, Pi and Gentle Shell) or updates what you have. Nothing is installed until you confirm; preparing the plan may download Node.js and pnpm into a temporary folder that is removed afterwards.
+3. **Continue to [Your first session](#your-first-session).** A new installation keeps its own Node.js, npm, pnpm and Pi in `~/.gentle-shell`; your own tools are not used or changed. See [bundled installation](docs/install-wizard.md#bundled-installation) for details.
 
 <a id="path-b-inside-an-existing-pi"></a>
 
 ### Already use Pi: add the package
 
-- Install the stable release into an existing pi agent, restart Pi, then synchronize the installed assets.
+1. **Install the stable release** into your existing Pi:
 
-  ```bash
-  # Published stable release: v4.1.0
-  pi install npm:gentle-pi@4.1.0
+   ```bash
+   pi install npm:gentle-pi@4.1.0
+   ```
 
-  # Restart Pi, then run:
-  gentle-ai sync
+2. **Exit and restart Pi.** Then, in a terminal, synchronize the installed assets:
 
-  # Start Pi in your project
-  pi
-  ```
+   ```bash
+   gentle-ai sync
+   ```
 
-  See the [v4.1.0 release notes](https://github.com/Gentleman-Programming/gentle-shell/releases/tag/v4.1.0) for version-specific changes.
+3. **Continue to [Your first session](#your-first-session)** using `pi` to open your project.
 
-  <details>
-  <summary>Builtin codemode warning</summary>
-
-  gentle-pi replaces Pi's builtin `codemode` with its compact renderer, so Pi warns at startup that the builtin was not loaded. In your own Pi home (`pi` with this package, or `gentle-shell --link`), gentle-pi asks once in the interactive TUI whether to add `"-builtin:codemode"` to `extensions` in the agent `settings.json` (usually `~/.pi/agent/settings.json`); it writes only if you accept, and the warning disappears from the next launch. A declined prompt is not repeated. To silence it by hand, add the entry yourself, for example `"extensions": ["-builtin:codemode"]`. Isolated `gentle-shell` homes already carry it.
-
-  </details>
+See the [v4.1.0 release notes](https://github.com/Gentleman-Programming/gentle-shell/releases/tag/v4.1.0). If Pi reports that builtin codemode was not loaded, see [why this warning appears and how to silence it](docs/readme-reference.md#builtin-codemode-warning).
 
 <a id="path-a-standalone-gentle-shell-recommended-no-pi-changes"></a>
 
 ### Prefer npm: standalone `gentle-shell`
 
-- `gentle-shell` opens Pi with the Gentle Shell package loaded, without installing it into your pi agent or editing its `settings.json`. It requires Pi 1.2.0 or newer.
+`gentle-shell` opens Pi with this package loaded without installing it into your existing Pi agent or editing its `settings.json`. It requires Pi 1.2.0 or newer.
 
-  ```bash
-  npm i -g gentle-pi
+1. **Install the launcher** in your terminal:
 
-  # Own home, never touches your pi install
-  gentle-shell
+   ```bash
+   npm i -g gentle-pi
+   ```
 
-  # Reuse your pi sign-ins, models and chats instead
-  gentle-shell --link
-  ```
+2. **Choose your home** when starting your [first session](#your-first-session):
+   - `gentle-shell` — a separate home, automatically set up on first run; leaves your Pi installation untouched.
+   - `gentle-shell --link` — reuse your Pi sign-ins, models and chats instead.
 
-  <details>
-  <summary>Standalone homes and sign-in</summary>
-
-  `gentle-shell` alone starts in its own home, `~/.gentle-shell/agent`, keeps its settings in `~/.gentle-shell/gentle-ai` (copied once from `~/.pi/gentle-ai` on the first launch that needs it), and sets that home up on first run — no separate step. Gentle Shell keeps its own home with the Gentle AI companion packages and no conflicting plugins; gentle-pi itself always stays this launcher's own copy, never one installed into the home; your pi install is untouched. That home also defaults to the Gentleman-Cute theme unless you set your own. `gentle-shell --link` reuses `~/.pi/agent` as-is, is never auto-provisioned, and never has its theme touched.
-
-  ```bash
-  # Re-run provisioning by hand, e.g. to see the full install output
-  gentle-shell setup
-  ```
-
-  `gentle-shell setup` installs the same companion packages gentle-ai provisions into a regular Pi, into this home only, then removes the one package that conflicts with gentle-pi's own `ask_user_question` tool (gentle-ai #4820). The first `gentle-shell` launch in a home already runs this automatically; `setup` is for re-running it by hand. See **[First run](docs/readme-reference.md#first-run-in-an-isolated-or-custom-home)** for the opt-out (`GENTLE_SHELL_NO_AUTO_SETUP=1`) and failure behavior.
-
-  ```bash
-  # Make --link the default
-  gentle-shell home link
-
-  # Or keep the separate home and copy your pi sign-ins into it
-  gentle-shell home import-pi --dry-run
-  gentle-shell home import-pi
-  ```
-
-  `gentle-shell home import-pi` copies `auth.json` (kept private, `0600`) and `mcp.json` from your pi home into the separate home, plus your default provider, model and thinking level when that home has none. It never overwrites a file or setting, never copies packages, extensions, caches or chats, and never changes your pi home. The tradeoff: `--link` shares one credential store with pi, while `import-pi` makes a second copy, so a provider that rotates refresh tokens may sign one of the two out; run `/login` again there.
-
-  Every other argument is forwarded to pi unchanged, for example `gentle-shell --mode rpc` or `gentle-shell -p "..."`. Full flags, env vars, and modes: **[launcher reference](docs/readme-reference.md#gentle-shell-launcher)**.
-
-  </details>
+For home locations, companion packages, theme defaults, manual setup, credential import and its refresh-token tradeoff, see [Standalone homes and sign-in](docs/readme-reference.md#standalone-homes-and-sign-in). Full flags, environment variables and forwarded arguments: [launcher reference](docs/readme-reference.md#gentle-shell-launcher).
 
 <a id="path-c-browser-installer-from-a-checkout"></a>
 
 ### Working from a clone: browser installer
 
-<details>
-<summary>Browser installer from a clone</summary>
+Start the same browser installer from a checkout:
 
-- The same installer as the [download above](#easiest-download-and-double-click-no-terminal-needed), started from a clone instead of a download:
+```bash
+git clone https://github.com/Gentleman-Programming/gentle-shell.git
+cd gentle-shell
+```
 
-  ```bash
-  git clone https://github.com/Gentleman-Programming/gentle-shell.git
-  cd gentle-shell
+Then run **one** command for your system:
 
-  # macOS and Linux
-  sh scripts/bootstrap.sh
+| macOS / Linux | Windows (cmd) |
+| :--- | :--- |
+| `sh scripts/bootstrap.sh` | `scripts\bootstrap.cmd` |
 
-  # Windows (cmd)
-  scripts\bootstrap.cmd
-  ```
+Use the browser tab it opens: its private `127.0.0.1` link works once and expires after 2 minutes. Review the plan, choose **Latest release** (recommended) or **Latest main** (development builds), and confirm before installation changes anything. Missing Node.js and pnpm may be downloaded temporarily to open the wizard; checkout dependencies are not needed (`pnpm install` is not required).
 
-  It installs what is missing (Node.js, pnpm, Pi, Gentle Shell) and updates an existing Gentle Shell or an older Pi; nothing changes until you confirm. The bootstrap gets Node.js and pnpm into a temporary folder if they are missing, then opens the wizard in your browser at a private `127.0.0.1` address. Use the tab it opens: the link works once and expires after 2 minutes. On the review screen, choose what to install:
+Existing tools may be reused or updated; the plan explains the changes. For channel differences, build-time Go downloads, version-manager handling, Windows checks and exact update rules, see [Browser installer from a clone](docs/readme-reference.md#browser-installer-from-a-clone). Then continue below.
 
-  - **Latest release** (recommended): the published Gentle Shell with its pinned Gentle AI binary.
-  - **Latest main**: development builds of Gentle Shell and Gentle AI from the latest commit of `main`, built on your computer with Go. If your Go is missing, older or its version cannot be checked, the installer downloads its own pinned, verified Go only for that build.
+<a id="your-first-session"></a>
 
-  <details>
-  <summary>Existing tool handling</summary>
+### Your first session
 
-  - **Node.js and pnpm:** An older Node.js or an incompatible pnpm (from mise, nvm, nvm-windows, fnm, Volta or Homebrew, for example) is left untouched: the installer uses its own pinned, verified copy and installs it under `$PNPM_HOME`, and the plan says so before you confirm; a version manager may still put your own version first in new terminals. This applies only to a new installation: with Gentle Shell already installed, an older Node.js or incompatible pnpm still blocks. On Windows, `bootstrap.cmd` also uses its own Node.js when it cannot verify where yours lives (an nvm-windows symlink or an fnm junction, for example), without running yours.
-  - **Your pnpm:** A pnpm in the pnpm global bin directory (`$PNPM_HOME/bin`) is never replaced or downgraded: pnpm 11.1.1 or newer, pnpm 12 included, is used as it is, an older one blocks with the `pnpm self-update` command that updates it, and one whose version could not be checked is left as it is while the installer uses its own verified pnpm, which the plan says before you confirm.
-  - **npm:** A working `npm` on your PATH (from Node.js, Homebrew, nvm, nvm-windows, fnm, mise, asdf or Volta, for example) is used as it is; the installer adds its own npm only when none works.
-  - **Windows:** On Windows it never runs `npm.cmd` or `pnpm.cmd` through a shell: it runs what a recognized shim runs, or the `.exe` itself, and treats any other shim as not usable. It also checks that no other account can change the pnpm home folder (`PNPM_HOME`), and never runs a pnpm from a folder another account can change (or one it cannot prove is pnpm, such as Corepack's `pnpm.cmd`): it uses its own verified pnpm instead and leaves yours as it is. When pnpm's default `%LOCALAPPDATA%\pnpm` fails that check and holds nothing yet, it uses `%USERPROFILE%\.pnpm` instead and `pnpm setup` saves it for new terminals; pnpm commands you run later still keep pnpm's configuration, cache and state under `%LOCALAPPDATA%`, an accepted risk the plan states. When that folder already holds files, or your own `PNPM_HOME` fails the check, it stops and names the folder, the account and its rights. The plan says so before you confirm.
-  - **Your existing tools:** Your Node.js, npm, Go, Pi or npm-installed Gentle Shell are used as you already use them; when one lives in a folder another account can change, the plan names that folder, the account and its rights as a notice, without blocking.
-  - **Go:** When a build needs Go (the main channel, or Windows) and yours is missing, older or its version cannot be checked, the installer downloads a pinned Go from go.dev, verifies its checksum and uses it only to build, from its own folder; your Go and PATH are left untouched, and the plan says so before you confirm. A release install on macOS or Linux never downloads Go.
-  - **Git:** Git is not needed to install; when it is missing the plan says so before you confirm, with the command to install it, because code review, worktrees and repository features need it.
-  - **Pi:** An existing Pi that meets the minimum is reused as it is. With pnpm 11, Gentle Shell may run a newer Pi than the installer's that pnpm puts next to it (always at least the minimum); the installer says which one when it finishes. An older Pi is updated to the version the installer installs, with the package manager that installed it (pnpm or npm); the plan shows the found and target versions before you confirm. An older Pi that neither manages (mise, Homebrew or a standalone binary, for example) is left untouched, and the installer adds its own Pi with pnpm, as when Pi is missing; Gentle Shell uses that one. Pi is never downgraded.
-  - **Gentle Shell:** An existing Gentle Shell is updated with the package manager that installed it (pnpm or npm); one it cannot attribute, such as an `npm link` of a source checkout, is left untouched and explained. No checkout dependencies are needed (`pnpm install` is not required).
+1. **Open your project in a terminal**, then start the launcher for the route you installed:
 
-  </details>
+   ```bash
+   cd /path/to/your/project
+   ```
 
-  Details: [installation wizard](docs/install-wizard.md).
+   | Installation | Run in that terminal |
+   | :--- | :--- |
+   | Integrated installer or standalone npm | `gentle-shell` |
+   | Package added to an existing Pi | `pi` |
+   | Standalone npm, reusing your Pi home | `gentle-shell --link` |
+   | Browser installer from a clone | `gentle-shell` (open your project, not necessarily the installer checkout) |
 
+   **Expected:** an interactive workspace with a prompt editor and a footer showing your current folder and model.
 
-</details>
+2. **Connect a provider inside that workspace:** enter `/login`, choose a provider, and follow its subscription or API-key prompts. Skip this if your selected home already has working credentials. Then enter `/model` and choose a model available to that provider. Provider access may require a paid subscription or usage credits; see [Pi's provider setup](https://github.com/earendil-works/pi/blob/main/docs/models.md) for environment-variable authentication, local models and other options.
+3. **Send a read-only first prompt:**
+
+   ```text
+   Explain how this repository is organized and how to run its checks. Do not modify any files.
+   ```
+
+   **Expected:** the agent inspects the project and replies with its structure and check commands, or explains what it could not determine. It should not modify files. A provider authentication or model-access error means this step has not succeeded yet; check `/login` and `/model` before proceeding.
 
 ### Check your setup
 
-```text
-/gentle:status
-/gentle:doctor
-```
+Run these **inside the Pi workspace**, not in your terminal shell:
 
-- ℹ️ **Good to know**
+| Command | What to look for |
+| :--- | :--- |
+| `/gentle:status` | `el Gentleman package is active.` followed by package-assets and global model-configuration details. If assets are missing or stale, follow the repair guidance it prints. |
+| `/gentle:doctor` | Diagnostic lines marked `pass:`, `warn:` or `fail:`. Resolve `fail:` entries using their `remedy:` guidance. Missing optional memory tools or a skill registry can produce warnings without preventing your first conversation. |
 
-  - **STATUS diagnostics are opt-in:** `/gentle:status-timing enable` arms timing for the next separately authorized STATUS-bearing tool call; `show` consults the memory-only summary and `disable` clears it. It never invokes or retries STATUS. See the [diagnostic boundaries](docs/readme-reference.md#diagnose-status-timing-without-retrying-it).
-  - **Fullscreen installation note:** a recognized global installation persists Pi’s `"tuiMode": "fullscreen"` setting. Project-local and other install paths do not receive that change.
-  - **Interactive RPC hosts:** the desktop app sets `GENTLE_SHELL_INTERACTIVE_HOST=1` automatically, without touching your Pi config — see the [installation reference](docs/readme-reference.md#interactive-rpc-hosts).
+A successful first reply confirms provider/model access; the diagnostics check the package setup. Neither alone proves the other.
+
+**Setup details:** [codemode warning](docs/readme-reference.md#builtin-codemode-warning) · [STATUS timing diagnostics](docs/readme-reference.md#diagnose-status-timing-without-retrying-it) · [install-time fullscreen](docs/readme-reference.md#install-time-fullscreen) · [interactive RPC hosts](docs/readme-reference.md#interactive-rpc-hosts).
 
 For updates and removal, see [Operations](#operations). For the product tour, continue below.
 
@@ -306,14 +276,14 @@ You should not have to run `git status` in every worktree to find out what your 
 
 Parallel work with a live view.
 
-<img width="100%" src="docs/assets/readme-studio/agents.png" alt="Real session overview: a completed agent card with model, tokens, cost and elapsed time above the four-item task plan and working prompt">
+<img width="100%" src="docs/assets/readme-studio/agents.png" alt="Detail from the real Agents overlay: a finished subagent in the session list, completed status, model and the beginning of its handoff">
 
-<p><sub>Real completed-agent overview and task plan, not a new quickstart run. The original Agents overlay and this session source are expandable below.</sub></p>
+<p><sub>Detail from the real Agents overlay: one completed worker and its handoff, not a demonstration of concurrent active jobs or output from the first-session prompt. Full overlay and a separate session example are expandable below.</sub></p>
 
 Delegating work should not mean losing it. Every subagent runs as its own process with a live card above the editor — model, tokens, cost, elapsed — and `alt+a` opens the full view with retained threads, stop controls, and history restored on resume. A child can ask you a question as an ordinary dialog, and background results come back as cards that start a new turn — nothing polls.
 
 <details>
-<summary>Agent/task session screenshot (full source)</summary>
+<summary>Secondary example: full agent/task session (historical workflow)</summary>
 
 <img width="100%" src="docs/assets/features/gentle-shell.png" alt="Full real session showing tool activity, a completed agent card, Todos, prompt and bottom status bar">
 
