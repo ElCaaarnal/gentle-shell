@@ -162,7 +162,7 @@ otherwise `herdr` from `PATH`, without a shell.
 
 ## Audio notifications
 
-Audio is off by default. `/gentle:customize` → **Notifications** shows audio controls directly in the same customization modal, separate from visual settings and profiles: global enable/disable, three independent type groups (**Success**, **Error**, **Attention**) that each own a builtin tone or a validated absolute local WAV, per-event exceptions folded behind **Advanced**, explicit preview, and process mute/resume. Enter cycles a type/event sound; `f` edits its local WAV path inline and `p` previews it. Preview does not enable or save automatic audio. Invalid/unreadable configuration requires fresh explicit replacement confirmation. RPC (including interactive hosts) and children remain silent. Linux/macOS listening and manual lifecycle verification are pending; Windows audio is unavailable. See [sound notifications](sound-notifications.md) for the complete schema, defaults, file security, retention costs and manual matrix.
+Audio is off by default. `/gentle:customize` → **Notifications** shows audio controls directly in the same customization modal, separate from visual settings and profiles: global enable/disable, three independent type groups (**Success**, **Error**, **Attention**) that each own a builtin tone or a validated absolute local WAV, per-event exceptions folded behind **Advanced**, explicit preview, and process mute/resume. Enter cycles a type/event sound; `f` edits its local WAV path inline and `p` previews it. Preview does not enable or save automatic audio. Invalid/unreadable configuration requires fresh explicit replacement confirmation. RPC (including interactive hosts) and children remain silent. Physical listening and manual lifecycle verification remain pending on every platform; WAV backends include Linux, WSL and native Windows, with format-specific support and limits documented in the linked guide. See [sound notifications](sound-notifications.md) for the complete schema, defaults, file security, retention costs and manual matrix.
 
 ## Native pointer regions
 
@@ -464,12 +464,7 @@ This take-over exists because two gentle-pi copies loaded at once — the declar
 
 ### `upgrade` subcommand and channels
 
-**Availability:** this subcommand was added on main in commit `96ff045a8`.
-No published `gentle-pi` release through v4.0.0 contains it; a minimum supported
-release version has not been published yet. Package version alone is not enough:
-a main build with the change can still be based on version 4.0.0. Older launchers
-forward `upgrade` to Pi as an ordinary argument, opening a session with it as the
-initial prompt. The `--channel` examples below also require a supporting build.
+**Release compatibility:** `upgrade` is available from `gentle-pi` v4.1.0 (and in main builds containing commit `96ff045a8`). Releases through v4.0.0 do not support it: on those launchers, `gentle-shell upgrade` opens a session with `upgrade` as the prompt instead of updating. The `--channel` examples below require a supporting build.
 
 #### Updating an installation without `upgrade`
 
@@ -490,9 +485,8 @@ Use a new checkout directory if `gentle-shell` already exists. The bootstrap
 opens the browser installation wizard; it detects the installed Gentle Shell
 and shows the update plan before you confirm. Choose **Latest release** to stay
 on stable, or **Latest main** to install the command from main. Updating to the
-current release does not add `upgrade`; switching back to it from main also
-removes access to the command. Repeat this bootstrap procedure for releases
-without it. If the installer cannot attribute the existing installation to npm
+v4.1.0 release or newer adds `upgrade`; releases through v4.0.0 do not.
+Repeat this bootstrap procedure for releases without it. If the installer cannot attribute the existing installation to npm
 or pnpm (for example, an `npm link` checkout), it leaves that installation
 untouched and explains why; see the [installation wizard](install-wizard.md).
 
@@ -1359,7 +1353,7 @@ Use it when you want skills available normally but do not want Gentle AI to refr
 
 ## Memory
 
-`gentle-pi` does **not** provide persistent memory by itself.
+`gentle-pi` does **not** provide persistent memory by itself. This is the package route, not the integrated distribution: a **bundled Gentle Shell installation** supplies the pinned Engram core and provisions the `gentle-engram` companion. It reuses only a server that proves compatibility, or starts the verified core when nothing listens; uncertain safety evidence disables memory for that launch without blocking Shell. Engram data remains shared at `~/.engram`, outside the product prefix. See [bundled startup safety and limits](bundled-install.md#engram-startup-safety).
 
 For memory, install the companion package:
 
